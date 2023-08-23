@@ -1,0 +1,30 @@
+
+body {
+    display: flex;
+    flex-direction: column;
+    gap: 3rem;
+}
+header {
+    width: 100vw;
+    height: 100px;
+}
+main {
+    width: 100vw;
+    height: 700px;
+    display: grid;
+    place-content: center;
+}
+main .board {
+    /* width: 600px; */
+    /* height: 600px; */
+    border: 2px solid black; 
+    display: grid;
+    grid-template-columns: repeat(8, 70px);
+    grid-template-rows: repeat(8, 70px);
+}
+.board div {
+    width: 70px;
+    height: 70px;
+    display: grid;
+    place-content: center;
+}

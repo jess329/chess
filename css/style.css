@@ -1,0 +1,38 @@
+:root {
+    --bg-clr: ;
+    --bg-black: #663300;
+    --bg-white: #ffbf80;
+}
+
+body, * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+header {
+    background: #FFF;
+}
+
+.black {
+    background: var(--bg-black);
+}
+.white {
+    background: var(--bg-white);
+}
+main i {
+    font-size: 40px;
+}
+i.player-white {
+    color: white;
+    -webkit-text-stroke: 2px black;
+}
+i.player-black {
+    color: black;
+    -webkit-text-stroke: 1px white;
+}
+
+
+main div.active {
+    border: 2px solid red;
+}
