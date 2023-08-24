@@ -57,7 +57,6 @@ squares.forEach(square => {
 
         // saving history of clicked squares in an array
         clickedSquares.push(square)
-        console.log(clickedSquares)
 
         // updating class of the active square
         squares.forEach(square => {
@@ -68,13 +67,16 @@ squares.forEach(square => {
         // move piece to current square if there is a piece on the last square
         let lastClickedSquare = clickedSquares[clickedSquares.length - 2]
         if(lastClickedSquare.piece) {
-            movePiece(lastClickedSquare, square)
+            const newState = movePiece(lastClickedSquare, square)
+            // console.log(newState);
+            square = newState[1]
+            let oldSquare = squares.find(oldSquare => oldSquare === newState[0])
         }
 
 
-        if(square.occupied) {
-            console.log(`player: ${square.playerColor}, ${square.piece}`);
-        }
+        // if(square.occupied) {
+        //     console.log(`player: ${square.playerColor}, ${square.piece}`);
+        // }
     })
 })
 
@@ -82,19 +84,20 @@ const movePiece = (currentSquare, nextSquare) => {
     console.log(currentSquare, nextSquare)
     if(!nextSquare.occupied) {
         nextSquare.element.appendChild(currentSquare.pieceElement)
+
+        nextSquare.occupied = true
+        nextSquare.piece = currentSquare.piece
+        nextSquare.pieceElement = currentSquare.pieceElement
+        nextSquare.playerColor = currentSquare.playerColor
+
+        currentSquare.occupied = false
+        currentSquare.piece = null
+        currentSquare.pieceElement = null
+        currentSquare.playerColor = null
+        
+        return [currentSquare, nextSquare]
     }
-    updateSquareInfo(currentSquare, nextSquare)
+    // updateSquareInfo(currentSquare, nextSquare)
 }
 
-const updateSquareInfo = (lastSquare, newSquare) => {
-    newSquare.occupied = true
-    newSquare.piece = current.piece
-    newSquare.pieceElement = current.pieceElement
-    newSquare.playerColor = current.playerColor
-
-    lastSquare.occupied = false
-    lastSquare.piece = null
-    lastSquare.pieceElement = null
-    lastSquare.playerColor = null
-}
 
