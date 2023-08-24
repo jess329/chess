@@ -14,6 +14,23 @@ main {
     display: grid;
     place-content: center;
 }
+main .main-content {
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+}
+main .btn-container {
+    display: grid;
+    gap: 1rem;
+}
+.btn-container > * {
+    padding: 0.5rem 1rem;
+    font-size: 20px;
+    border-radius: 20px;
+    cursor: pointer;
+    font-family: 'Secular One';
+    background-image: linear-gradient(to right, #a8ff78, #78ffd6);
+}
 main .board {
     /* width: 600px; */
     /* height: 600px; */

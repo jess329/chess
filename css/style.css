@@ -36,3 +36,12 @@ i.player-black {
 main div.active {
     border: 2px solid red;
 }
+
+@keyframes flip {
+    0% {
+        transform: rotateY(0deg)
+    }
+    100% {
+        transform: rotateY(180deg)
+    }
+}

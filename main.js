@@ -100,4 +100,10 @@ const movePiece = (currentSquare, nextSquare) => {
     // updateSquareInfo(currentSquare, nextSquare)
 }
 
+const flipButton = document.getElementsByClassName("flip")[0]
+const board = document.getElementsByClassName("board")[0]
+flipButton.onclick = () => {
+    board.classList.add("flipped")
+}
+
 

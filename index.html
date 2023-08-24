@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://kit.fontawesome.com/a2cc8125a2.js" crossorigin="anonymous"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Secular+One:wght@400&display=swap" rel="stylesheet">
+
     <title>Chess</title>
 
     <link rel="stylesheet" href="css/style.css">
@@ -14,86 +16,100 @@
 
     </header>
     <main>
-        <section class="board">
-            <!-- Start with a light square -->
-            <!-- Start position player black -->
-        <div class="white"><i class="fa-solid fa-chess-rook player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-knight player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-bishop player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-queen player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-king player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-bishop player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-knight player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-rook player-black"></i></div>
+        <section class="main-content">
+            <section class="btn-container">
+                <button class="btn flip">
+                    <p>Flip Board</p>
+                </button>
+                <button class="btn restart">
+                    <p>New Game</p>
+                </button>
+            </section>
 
-        <!-- Next row starts with a dark square -->
-        <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+            <section class="board">
+                <!-- Start with a light square -->
+                <!-- Start position player black -->
+                <div class="white"><i class="fa-solid fa-chess-rook player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-knight player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-bishop player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-queen player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-king player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-bishop player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-knight player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-rook player-black"></i></div>
 
-        <!-- Repeat the pattern for the remaining rows -->
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
+                <!-- Next row starts with a dark square -->
+                <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-black"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-black"></i></div>
 
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
+                <!-- Repeat the pattern for the remaining rows -->
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
 
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
 
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
-        <div class="black"></div>
-        <div class="white"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
 
-        <!-- Start position player white -->
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
+                <div class="black"></div>
+                <div class="white"></div>
 
-        <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <!-- Start position player white -->
 
-        <!-- Next row starts with a dark square -->
-        <div class="black"><i class="fa-solid fa-chess-rook player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-knight player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-bishop player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-queen player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-king player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-bishop player-white"></i></div>
-        <div class="black"><i class="fa-solid fa-chess-knight player-white"></i></div>
-        <div class="white"><i class="fa-solid fa-chess-rook player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-pawn player-white"></i></div>
+
+                <!-- Next row starts with a dark square -->
+                <div class="black"><i class="fa-solid fa-chess-rook player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-knight player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-bishop player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-queen player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-king player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-bishop player-white"></i></div>
+                <div class="black"><i class="fa-solid fa-chess-knight player-white"></i></div>
+                <div class="white"><i class="fa-solid fa-chess-rook player-white"></i></div>
+            </section>
+
+
         </section>
+        
     </main>
 
 
