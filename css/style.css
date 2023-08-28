@@ -1,5 +1,5 @@
 :root {
-    --bg-clr: ;
+    --bg-clr: #3d4345;
     --bg-black: #663300;
     --bg-white: #ffbf80;
 }
@@ -9,9 +9,12 @@ body, * {
     padding: 0;
     box-sizing: border-box;
 }
+body {
+    background: var(--bg-clr);
+}
 
 header {
-    background: #FFF;
+    /* background: #FFF; */
 }
 
 .black {

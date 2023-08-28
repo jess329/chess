@@ -9,7 +9,6 @@ let gameStarted = false
 
 const rows = 8
 const cols = 8
-
 const createRowsCols = () => {
     const boardLayout = []
     for (let row = 1; row <= rows; row++) {
