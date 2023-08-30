@@ -1,5 +1,4 @@
 const boardElem = document.getElementsByClassName("board")[0]
-const allSquares = [...document.querySelectorAll(".white, .black")]
 const pieces = [...document.querySelectorAll(".player-white, .player-black")]
 const flipButton = document.getElementsByClassName("flip")[0]
 const restartButton = document.getElementsByClassName("restart")[0]
@@ -11,11 +10,13 @@ class Board {
     constructor() {
         this.board = boardElem
         this.squares = []
+        this.bottomPlayerWhite = true
         this.rows = 8
         this.cols = 8
     }
-
+    
     initializeBoard() {
+        const allSquares = [...document.querySelectorAll(".white, .black")]
         const boardLayout = []
         for (let row = 1; row <= this.rows; row++) {
             for (let col = 1; col <= this.cols; col++) {
@@ -56,10 +57,10 @@ class Board {
     
             return square
         })
-        boardStarter.push(this.squares)
     }  
 
     makeMove(fromSquare, toSquare) {
+        boardStarter.push(this.squares)
 
         // making copies from the old and new square
         const copyOfFromSquare = {...fromSquare}
@@ -107,10 +108,14 @@ class Board {
         })
 
         console.log(this.squares);
+        this.initializeBoard()
     }
     
     flipBoard() {
         // all new positions of the pieces are generated and stored in a new array
+        boardStarter.push(this.squares)
+        this.bottomPlayerWhite = !this.bottomPlayerWhite
+        // console.log(this.bottomPLayerWhite)
         
         const flippedBoard = []
         for(let square of this.squares) {
@@ -132,10 +137,30 @@ class Board {
         // console.log(flippedBoard)
         this.squares = [...flippedBoard]
         this.updateUI()
+
+
+        const resetBoard = []
+        this.squares.map(square => {
+            const copyOfSquare = {...square}
+            const flippedSquare = this.squares.find(newSquare => {
+                return newSquare.row == square.row &&
+                newSquare.col === square.col
+            })
+
+            copyOfSquare.occupied = flippedSquare.occupied
+            copyOfSquare.piece = flippedSquare.piece
+            copyOfSquare.pieceElement = flippedSquare.pieceElement
+            copyOfSquare.playerColor = flippedSquare.playerColor
+
+            resetBoard.push(copyOfSquare)
+        })
+        this.squares = [...resetBoard]
     }
     
     restart() {
-        this.squares = [...boardStarter[0]]
+        const starter = boardStarter[0]
+        console.log(boardStarter, starter)
+        this.squares = [...starter]
         this.updateUI()
     }   
     
@@ -177,19 +202,34 @@ class Game {
         const board = this.gameBoard
         board.initializeBoard()
         board.squares.forEach(square => {
-            const {element, squareColor, row, col, rowFlipped, colFlipped, occupied, piece, pieceElement, playerColor} = square
-            const squareInstance = new Square(element, squareColor, row, col, rowFlipped, colFlipped, occupied, piece, pieceElement, playerColor)
-            squares.push(squareInstance)
 
+            
+            // const squareInstance = new Square(...square)
+            // console.log(squareInstance)
+            // squares.push(squareInstance)
+            
             square.element.addEventListener("click", () => {
+                if(!board.bottomPlayerWhite) {
+                    const flippedSquare = board.squares.find(newSquare => {
+                        return newSquare.row == square.row &&
+                        newSquare.col === square.col
+                    })
+        
+                    square.occupied = flippedSquare.occupied
+                    square.piece = flippedSquare.piece
+                    square.pieceElement = flippedSquare.pieceElement
+                    square.playerColor = flippedSquare.playerColor
+                }
+                
                 board.squares.forEach(square => {
                     square.element.classList.remove("active")
+
                 })
                 square.element.classList.add("active")
 
                 clickedSquares.push(square)
 
-                const lastClickedSquare = clickedSquares[clickedSquares.length - 2]
+                const lastClickedSquare = {...clickedSquares[clickedSquares.length - 2]}
                 if(lastClickedSquare.occupied && !square.occupied) {
                     this.gameStarted = true
                     board.makeMove(lastClickedSquare, square)
