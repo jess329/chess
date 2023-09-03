@@ -1,3 +1,4 @@
+const allSquares = [...document.querySelectorAll(".white, .black")]
 const boardElem = document.getElementsByClassName("board")[0]
 const pieces = [...document.querySelectorAll(".player-white, .player-black")]
 const flipButton = document.getElementsByClassName("flip")[0]
@@ -14,9 +15,8 @@ class Board {
         this.rows = 8
         this.cols = 8
     }
-    
-    initializeBoard() {
-        const allSquares = [...document.querySelectorAll(".white, .black")]
+
+    createBoardLayout() {
         const boardLayout = []
         for (let row = 1; row <= this.rows; row++) {
             for (let col = 1; col <= this.cols; col++) {
@@ -26,9 +26,15 @@ class Board {
                 })
             }
         }
+
+        return boardLayout
+    }
+    
+    createBoard() {
+        const boardLayout = this.createBoardLayout()
         
         // an array that contains the information about all squares on the board
-        this.squares = allSquares.map((square) => {
+        const board = allSquares.map((square) => {
             const index = allSquares.indexOf(square)
             const current = boardLayout[index]
             // every element is made to an object that holds the properties of the square
@@ -40,6 +46,12 @@ class Board {
                 col: current.col,
                 rowFlipped: 9 - current.row,
                 colFlipped: 9 - current.col,
+                initial: {
+                    occupied: false,
+                    piece: null,
+                    pieceElement: null,
+                    playerColor: null
+                },
                 occupied: false,
                 piece: null,
                 pieceElement: null,
@@ -52,22 +64,36 @@ class Board {
                     square.piece = piece.classList[1].split("-")[2]
                     square.pieceElement = piece
                     square.playerColor = piece.classList[2].split("-")[1]
+                    square.initial = {
+                        occupied: true,
+                        piece: piece.classList[1].split("-")[2],
+                        pieceElement: piece,
+                        playerColor: piece.classList[2].split("-")[1]
+                    }
                 }
             })
     
             return square
         })
+        return board
+
     }  
 
+    initializeBoard() {
+        this.squares = this.createBoard()
+    }
+
+
+
     makeMove(fromSquare, toSquare) {
-        boardStarter.push(this.squares)
 
         // making copies from the old and new square
         const copyOfFromSquare = {...fromSquare}
         const copyOfToSquare = {...toSquare}
+        // const newBoard = []
 
         // the array of all squares is mapped and the two squares modified
-        this.squares.map(square => {
+        const newBoard = this.squares.map(square => {
             if(square.row === fromSquare.row && square.col === fromSquare.col) {
 
                 // the modifiable properties of the new square are copied to the old square
@@ -85,6 +111,8 @@ class Board {
             }
             return square
         })
+        this.squares = [...newBoard]
+
 
         this.updateUI()
         // console.log(this.squares)
@@ -107,8 +135,7 @@ class Board {
             this.board.appendChild(squareElement)
         })
 
-        console.log(this.squares);
-        this.initializeBoard()
+        // console.log(this.squares)
     }
     
     flipBoard() {
@@ -137,30 +164,25 @@ class Board {
         // console.log(flippedBoard)
         this.squares = [...flippedBoard]
         this.updateUI()
-
-
-        const resetBoard = []
-        this.squares.map(square => {
-            const copyOfSquare = {...square}
-            const flippedSquare = this.squares.find(newSquare => {
-                return newSquare.row == square.row &&
-                newSquare.col === square.col
-            })
-
-            copyOfSquare.occupied = flippedSquare.occupied
-            copyOfSquare.piece = flippedSquare.piece
-            copyOfSquare.pieceElement = flippedSquare.pieceElement
-            copyOfSquare.playerColor = flippedSquare.playerColor
-
-            resetBoard.push(copyOfSquare)
-        })
-        this.squares = [...resetBoard]
     }
     
     restart() {
-        const starter = boardStarter[0]
-        console.log(boardStarter, starter)
-        this.squares = [...starter]
+        const initialBoard = []
+        for (let initialSquare of this.squares) {
+            const copyOfSquare = {...initialSquare}
+            const square = this.squares.find(square => {
+                return square.pieceElement == initialSquare.initial.pieceElement
+            })
+
+            copyOfSquare.occupied = square.occupied
+            copyOfSquare.piece = square.piece
+            copyOfSquare.pieceElement = square.pieceElement
+            copyOfSquare.playerColor = square.playerColor
+
+            initialBoard.push(copyOfSquare)
+        }
+
+        this.squares = [...initialBoard]
         this.updateUI()
     }   
     
