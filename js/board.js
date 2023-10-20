@@ -56,8 +56,8 @@ class Board {
                 piece: null,
                 pieceElement: null,
                 playerColor: null,
-            }
-    
+            } 
+             
             pieces.map((piece) => {
                 if(piece.parentNode === square.element) {
                     square.occupied = true
@@ -189,6 +189,7 @@ class Board {
 }
 
 class Square {
+    // I don't know what this class is for
     constructor(squareElem, squareColor, row, col, rowFlipped, colFlipped, occupied, piece, pieceElement, playerColor) {
         this.squareElem = squareElem
         this.squareColor = squareColor 
