@@ -1,29 +1,44 @@
-const allSquares = [...document.querySelectorAll(".white, .black")]
-const boardElem = document.getElementsByClassName("board")[0]
-const pieces = [...document.querySelectorAll(".player-white, .player-black")]
-const flipButton = document.getElementsByClassName("flip")[0]
-const restartButton = document.getElementsByClassName("restart")[0]
-const boardStarter = []
-
-
+const ROWS = 8
+const COLS = 8
+const START_LAYOUT = "RNBKQBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbqkbnr"
+const PIECES_HTML = {
+    "R": "♜",
+    "N": "♞",
+    "B": "♝",
+    "K": "♚",
+    "Q": "♛",
+    "P": "♟",
+    "r": "♖",
+    "n": "♘",
+    "b": "♗",
+    "k": "♔",
+    "q": "♕",
+    "p": "♙",
+    "*": ""
+}
+// upper case -> black figures
+// lower case -> white figures
 
 class Board {
     constructor() {
-        this.board = boardElem
-        this.squares = []
+        this.board = document.querySelector(".board")
         this.bottomPlayerWhite = true
-        this.rows = 8
-        this.cols = 8
+        this.rows = ROWS
+        this.cols = COLS
     }
 
     createBoardLayout() {
         const boardLayout = []
-        for (let row = 1; row <= this.rows; row++) {
-            for (let col = 1; col <= this.cols; col++) {
+        for (let row = 0; row < this.rows; row++) {
+            for (let col = 0; col < this.cols; col++) {
                 boardLayout.push({
                     row: row, 
                     col: col,
                 })
+
+                const square = document.createElement("div")
+                square.className = (row + col) % 2 == 0 ? "black" : "white"
+                this.board.appendChild(square)
             }
         }
 
@@ -44,8 +59,6 @@ class Board {
                 squareColor: square.classList.value, 
                 row: current.row, 
                 col: current.col,
-                rowFlipped: 9 - current.row,
-                colFlipped: 9 - current.col,
                 initial: {
                     occupied: false,
                     piece: null,
@@ -79,8 +92,45 @@ class Board {
 
     }  
 
+    splitLayoutStr() {
+        let arr = START_LAYOUT.split("/")
+        for (let i = 0; i < ROWS; i++) {
+            const row = arr[i]
+            arr[i] = row.split("")
+        }
+        return arr
+    }
+
+    createPieces() {
+        const allSquares = [...document.querySelectorAll(".white, .black")]
+        const boardArr = this.splitLayoutStr()   
+        // for (let i = 0; i < ROWS; i++) {
+        //     for (let j = 0; j < COLS; j++) {
+        //         const pieceStr = boardArr[i][j]
+        //         const piece_html = PIECES_HTML[pieceStr]
+
+        //         let square = allSquares[squareIndex]
+        //         square.innerHTML = piece_html
+        //     }
+        // }     
+        // console.log(boardArr);
+
+        const boardLayout = this.createBoardLayout() 
+
+        allSquares.map((square) => {
+            const index = allSquares.indexOf(square)
+            const current = boardLayout[index]
+
+            const pieceStr = boardArr[current.row][current.col]
+            const piece_html = PIECES_HTML[pieceStr]
+            square.innerHTML = piece_html
+        })   
+        console.log(boardArr);
+    }
+
     initializeBoard() {
-        this.squares = this.createBoard()
+        this.createBoardLayout()
+        this.createPieces()
     }
 
 
@@ -138,34 +188,7 @@ class Board {
         // console.log(this.squares)
     }
     
-    flipBoard() {
-        // all new positions of the pieces are generated and stored in a new array
-        boardStarter.push(this.squares)
-        this.bottomPlayerWhite = !this.bottomPlayerWhite
-        // console.log(this.bottomPLayerWhite)
-        
-        const flippedBoard = []
-        for(let square of this.squares) {
-            const copyOfSquare = {...square}
-            
-            const newSquare = this.squares.find(newSquare => {
-                return newSquare.row == square.rowFlipped &&
-                newSquare.col === square.colFlipped
-            })
-            
-            copyOfSquare.occupied = newSquare.occupied
-            copyOfSquare.piece = newSquare.piece
-            copyOfSquare.pieceElement = newSquare.pieceElement
-            copyOfSquare.playerColor = newSquare.playerColor
-            
-            flippedBoard.push(copyOfSquare)
-        }
-        
-        // console.log(flippedBoard)
-        this.squares = [...flippedBoard]
-        this.updateUI()
-    }
-    
+
     restart() {
         const initialBoard = []
         for (let initialSquare of this.squares) {
@@ -188,32 +211,6 @@ class Board {
     
 }
 
-class Square {
-    // I don't know what this class is for
-    constructor(squareElem, squareColor, row, col, rowFlipped, colFlipped, occupied, piece, pieceElement, playerColor) {
-        this.squareElem = squareElem
-        this.squareColor = squareColor 
-        this.row = row
-        this.col = col
-        this.rowFlipped = rowFlipped
-        this.colFlipped = colFlipped
-        this.occupied = occupied
-        this.piece = piece
-        this.pieceElement = pieceElement
-        this.playerColor = playerColor
-
-    }
-}
-
-// export class Piece {
-//     constructor() {
-
-//     }
-// }
-
-const squares = []
-let clickedSquares = [] 
-
 
 class Game {
     constructor() {
@@ -226,23 +223,7 @@ class Game {
         board.initializeBoard()
         board.squares.forEach(square => {
 
-            
-            // const squareInstance = new Square(...square)
-            // console.log(squareInstance)
-            // squares.push(squareInstance)
-            
             square.element.addEventListener("click", () => {
-                if(!board.bottomPlayerWhite) {
-                    const flippedSquare = board.squares.find(newSquare => {
-                        return newSquare.row == square.row &&
-                        newSquare.col === square.col
-                    })
-        
-                    square.occupied = flippedSquare.occupied
-                    square.piece = flippedSquare.piece
-                    square.pieceElement = flippedSquare.pieceElement
-                    square.playerColor = flippedSquare.playerColor
-                }
                 
                 board.squares.forEach(square => {
                     square.element.classList.remove("active")
@@ -260,9 +241,6 @@ class Game {
             })
         })
 
-        flipButton.onclick = () => {
-            board.flipBoard()
-        }
         restartButton.onclick = () => {
             board.restart()
         }
@@ -272,12 +250,5 @@ class Game {
 
 const game = new Game()
 game.start()
-
-
-// const board = new Board()
-// board.initializeBoard()
-
-
-
  
 

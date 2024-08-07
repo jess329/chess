@@ -1,5 +1,5 @@
 :root {
-    --bg-clr: #3d4345;
+    --bg-clr: #fff2e6;
     --bg-black: #663300;
     --bg-white: #ffbf80;
 }
@@ -8,6 +8,7 @@ body, * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
+    font-family: 'Secular One';
 }
 body {
     background: var(--bg-clr);
@@ -35,8 +36,10 @@ i.player-black {
     -webkit-text-stroke: 1px white;
 }
 
-
 main div.active {
     border: 2px solid red;
 }
 
+.black, .white {
+    font-size: 50px;
+}

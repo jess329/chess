@@ -1,8 +1,8 @@
 import { Piece } from "./board";
 
 class Pawn extends Piece {
-    constructor (color, ) {
-        this.color = color;
+    constructor (isBlack, ) {
+        this.isBlack = isBlack;
         
     }
 

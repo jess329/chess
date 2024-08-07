@@ -2,7 +2,7 @@
 body {
     display: flex;
     flex-direction: column;
-    gap: 3rem;
+    /* gap: 3rem; */
 }
 header {
     width: 100vw;
@@ -17,19 +17,21 @@ main {
 main .main-content {
     display: flex;
     align-items: flex-start;
-    gap: 1rem;
+    gap: 2rem;
 }
 main .btn-container {
     display: grid;
-    gap: 1rem;
+    gap: 2rem;
 }
-.btn-container > * {
-    padding: 0.5rem 1rem;
+.btn-container button {
+    padding: 0.5rem 3rem;
     font-size: 20px;
     border-radius: 20px;
     cursor: pointer;
-    font-family: 'Secular One';
     background-image: linear-gradient(to right, #a8ff78, #78ffd6);
+}
+.input {
+    display: grid;
 }
 main .board {
     /* width: 600px; */
@@ -43,5 +45,13 @@ main .board {
     width: 70px;
     height: 70px;
     display: grid;
+    grid-template-columns: 8;
     place-content: center;
+}
+
+.board .black {
+    background-color: #662200;
+}
+.board .white {
+    background-color: #ffbf80;
 }
