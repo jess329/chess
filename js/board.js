@@ -1,5 +1,6 @@
-const ROWS = 8
-const COLS = 8
+const ROWS = 9
+const COLS = 9
+const colChars = ["A", "B", "C", "D", "E", "F", "G", "H"]
 const START_LAYOUT = "RNBKQBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbqkbnr"
 const PIECES_HTML = {
     "R": "♜",
@@ -22,36 +23,60 @@ const PIECES_HTML = {
 class Board {
     constructor() {
         this.board = document.querySelector(".board")
-        this.bottomPlayerWhite = true
+        this.boardLayout = []
         this.rows = ROWS
         this.cols = COLS
     }
+    
+    splitLayoutStr() {
+        let arr = START_LAYOUT.split("/")
+        for (let i = 0; i < ROWS; i++) {
+            const row = arr[i]
+            arr[i] = row.split("")
+        }
+        return arr
+    }
 
+    setPositionMarks() {
+        const allSquares = [...document.querySelectorAll(".white, .black, .posMark")]
+        for (let c = 1; c < this.cols; c++) {
+            const square = allSquares[c]
+            console.log(square); 
+            square.innerHTML = colChars[c - 1] 
+        }
+        for (let c = 9; c < 73; c += 9) {
+            const square = allSquares[c]
+            console.log(square); 
+            square.innerHTML = c / 9 
+        }
+    }
+    
     createBoardLayout() {
-        const boardLayout = []
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
-                boardLayout.push({
+                this.boardLayout.push({
                     row: row, 
                     col: col,
                 })
-
+                
                 const square = document.createElement("div")
-                square.className = (row + col) % 2 == 0 ? "black" : "white"
+                if (row != 0 && col != 0) {
+                    square.className = (row + col) % 2 == 0 ? "black" : "white"
+                } else {
+                    square.className = "posMark"
+                }
                 this.board.appendChild(square)
             }
         }
-
-        return boardLayout
     }
     
     createBoard() {
-        const boardLayout = this.createBoardLayout()
+        // const boardLayout = this.createBoardLayout()
         
         // an array that contains the information about all squares on the board
         const board = allSquares.map((square) => {
             const index = allSquares.indexOf(square)
-            const current = boardLayout[index]
+            const current = this.boardLayout[index]
             // every element is made to an object that holds the properties of the square
             // the position of square (row & column) is generated in the boardLayout above
             square = {
@@ -89,21 +114,14 @@ class Board {
             return square
         })
         return board
-
+        
     }  
-
-    splitLayoutStr() {
-        let arr = START_LAYOUT.split("/")
-        for (let i = 0; i < ROWS; i++) {
-            const row = arr[i]
-            arr[i] = row.split("")
-        }
-        return arr
-    }
-
+    
+    
     createPieces() {
-        const allSquares = [...document.querySelectorAll(".white, .black")]
         const boardArr = this.splitLayoutStr()   
+        const boardLayout = this.createBoardLayout() 
+        const allSquares = [...document.querySelectorAll(".white, .black")]
         // for (let i = 0; i < ROWS; i++) {
         //     for (let j = 0; j < COLS; j++) {
         //         const pieceStr = boardArr[i][j]
@@ -114,8 +132,6 @@ class Board {
         //     }
         // }     
         // console.log(boardArr);
-
-        const boardLayout = this.createBoardLayout() 
 
         allSquares.map((square) => {
             const index = allSquares.indexOf(square)
@@ -130,7 +146,8 @@ class Board {
 
     initializeBoard() {
         this.createBoardLayout()
-        this.createPieces()
+        this.setPositionMarks()
+        // this.createPieces()
     }
 
 
