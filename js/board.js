@@ -1,7 +1,7 @@
 const ROWS = 9
 const COLS = 9
 const colChars = ["A", "B", "C", "D", "E", "F", "G", "H"]
-const START_LAYOUT = "RNBKQBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbqkbnr"
+const START_LAYOUT = "RNBQKBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbkqbnr"
 const PIECES_HTML = {
     "R": "♜",
     "N": "♞",
@@ -30,7 +30,7 @@ class Board {
     
     splitLayoutStr() {
         let arr = START_LAYOUT.split("/")
-        for (let i = 0; i < ROWS; i++) {
+        for (let i = 0; i < 8; i++) {
             const row = arr[i]
             arr[i] = row.split("")
         }
@@ -41,12 +41,10 @@ class Board {
         const allSquares = [...document.querySelectorAll(".white, .black, .posMark")]
         for (let c = 1; c < this.cols; c++) {
             const square = allSquares[c]
-            console.log(square); 
             square.innerHTML = colChars[c - 1] 
         }
         for (let c = 9; c < 73; c += 9) {
             const square = allSquares[c]
-            console.log(square); 
             square.innerHTML = c / 9 
         }
     }
@@ -69,85 +67,25 @@ class Board {
             }
         }
     }
-    
-    createBoard() {
-        // const boardLayout = this.createBoardLayout()
-        
-        // an array that contains the information about all squares on the board
-        const board = allSquares.map((square) => {
-            const index = allSquares.indexOf(square)
-            const current = this.boardLayout[index]
-            // every element is made to an object that holds the properties of the square
-            // the position of square (row & column) is generated in the boardLayout above
-            square = {
-                element: square, 
-                squareColor: square.classList.value, 
-                row: current.row, 
-                col: current.col,
-                initial: {
-                    occupied: false,
-                    piece: null,
-                    pieceElement: null,
-                    playerColor: null
-                },
-                occupied: false,
-                piece: null,
-                pieceElement: null,
-                playerColor: null,
-            } 
-             
-            pieces.map((piece) => {
-                if(piece.parentNode === square.element) {
-                    square.occupied = true
-                    square.piece = piece.classList[1].split("-")[2]
-                    square.pieceElement = piece
-                    square.playerColor = piece.classList[2].split("-")[1]
-                    square.initial = {
-                        occupied: true,
-                        piece: piece.classList[1].split("-")[2],
-                        pieceElement: piece,
-                        playerColor: piece.classList[2].split("-")[1]
-                    }
-                }
-            })
-    
-            return square
-        })
-        return board
-        
-    }  
-    
-    
-    createPieces() {
-        const boardArr = this.splitLayoutStr()   
-        const boardLayout = this.createBoardLayout() 
+
+    setInitialPieces() {
+        const boardArr = this.splitLayoutStr()  
         const allSquares = [...document.querySelectorAll(".white, .black")]
-        // for (let i = 0; i < ROWS; i++) {
-        //     for (let j = 0; j < COLS; j++) {
-        //         const pieceStr = boardArr[i][j]
-        //         const piece_html = PIECES_HTML[pieceStr]
+        for (let i = 0; i < 8; i++) {
+            const blackPieceStr = boardArr[0][i]
+            const whitePieceStr = boardArr[7][i]
 
-        //         let square = allSquares[squareIndex]
-        //         square.innerHTML = piece_html
-        //     }
-        // }     
-        // console.log(boardArr);
-
-        allSquares.map((square) => {
-            const index = allSquares.indexOf(square)
-            const current = boardLayout[index]
-
-            const pieceStr = boardArr[current.row][current.col]
-            const piece_html = PIECES_HTML[pieceStr]
-            square.innerHTML = piece_html
-        })   
-        console.log(boardArr);
+            allSquares[i].innerHTML = PIECES_HTML[blackPieceStr]
+            allSquares[8 + i].innerHTML = PIECES_HTML["P"]
+            allSquares[48 + i].innerHTML = PIECES_HTML["p"]
+            allSquares[56 + i].innerHTML = PIECES_HTML[whitePieceStr]
+        }
     }
 
     initializeBoard() {
         this.createBoardLayout()
         this.setPositionMarks()
-        // this.createPieces()
+        this.setInitialPieces()
     }
 
 
@@ -236,31 +174,7 @@ class Game {
     }
 
     start() {
-        const board = this.gameBoard
-        board.initializeBoard()
-        board.squares.forEach(square => {
-
-            square.element.addEventListener("click", () => {
-                
-                board.squares.forEach(square => {
-                    square.element.classList.remove("active")
-
-                })
-                square.element.classList.add("active")
-
-                clickedSquares.push(square)
-
-                const lastClickedSquare = {...clickedSquares[clickedSquares.length - 2]}
-                if(lastClickedSquare.occupied && !square.occupied) {
-                    this.gameStarted = true
-                    board.makeMove(lastClickedSquare, square)
-                }
-            })
-        })
-
-        restartButton.onclick = () => {
-            board.restart()
-        }
+        this.gameBoard.initializeBoard()
     }
 
 }
