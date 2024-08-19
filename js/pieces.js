@@ -1,38 +1,45 @@
-import { Piece } from "./board";
 
-class Pawn extends Piece {
-    constructor (isBlack, ) {
-        this.isBlack = isBlack;
-        
+
+export class Pawn extends Piece {
+    #isBlack
+    constructor (board, isBlack) {
+        this.#isBlack = setBlack(isBlack);
+        this.board = board
     }
 
+    getBlack() {
+        return this.#isBlack
+    }
+    setBlack(isBlack) {
+        this.#isBlack = isBlack
+    }
 }
 
-class Rook extends Piece {
+export class Rook extends Piece {
     constructor () {
 
     }
 }
 
-class Knight extends Piece {
+export class Knight extends Piece {
     constructor () {
 
     }
 }
 
-class Bishop extends Piece {
+export class Bishop extends Piece {
     constructor () {
 
     }
 }
 
-class Queen extends Piece {
+export class Queen extends Piece {
     constructor () {
 
     }
 }
 
-class King extends Piece {
+export class King extends Piece {
     constructor () {
 
     }

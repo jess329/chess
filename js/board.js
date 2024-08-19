@@ -1,3 +1,5 @@
+// import { Pawn, Rook, Bishop, Knight, King, Queen } from "./pieces.js"
+
 const ROWS = 9
 const COLS = 9
 const colChars = ["A", "B", "C", "D", "E", "F", "G", "H"]
@@ -22,7 +24,8 @@ const PIECES_HTML = {
 
 class Board {
     constructor() {
-        this.board = document.querySelector(".board")
+        this.boardHTML = document.querySelector(".board")
+        this.boardStringArr = this.splitLayoutStr() 
         this.boardLayout = []
         this.rows = ROWS
         this.cols = COLS
@@ -49,31 +52,25 @@ class Board {
         }
     }
     
-    createBoardLayout() {
+    createBoardSquares() {
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
-                this.boardLayout.push({
-                    row: row, 
-                    col: col,
-                })
-                
                 const square = document.createElement("div")
                 if (row != 0 && col != 0) {
                     square.className = (row + col) % 2 == 0 ? "black" : "white"
                 } else {
                     square.className = "posMark"
                 }
-                this.board.appendChild(square)
+                this.boardHTML.appendChild(square)
             }
         }
     }
 
     setInitialPieces() {
-        const boardArr = this.splitLayoutStr()  
         const allSquares = [...document.querySelectorAll(".white, .black")]
         for (let i = 0; i < 8; i++) {
-            const blackPieceStr = boardArr[0][i]
-            const whitePieceStr = boardArr[7][i]
+            const blackPieceStr = this.boardStringArr[0][i]
+            const whitePieceStr = this.boardStringArr[7][i]
 
             allSquares[i].innerHTML = PIECES_HTML[blackPieceStr]
             allSquares[8 + i].innerHTML = PIECES_HTML["P"]
@@ -82,67 +79,35 @@ class Board {
         }
     }
 
+    setBoardLayout() {
+        for (let row = 0; row < 8; row++) {
+            this.boardLayout[row] = []
+            for (let col = 0; col < 8; col++) {
+                let squareObj = {
+                    row: row,
+                    col: col,
+                    pieceHTML: PIECES_HTML[this.boardStringArr[row][col]],
+                }
+                if (row == 1) {
+                    squareObj[pieceObj] = new Pawn(this, true)
+                }
+                if (row == 7) {
+                    squareObj[pieceObj] = new Pawn(this, false)
+                }
+                this.boardLayout[row][col] = squareObj
+            }
+        }
+
+
+        console.log(this.boardLayout);
+    }
+
     initializeBoard() {
-        this.createBoardLayout()
+        this.createBoardSquares()
         this.setPositionMarks()
         this.setInitialPieces()
+        this.setBoardLayout()
     }
-
-
-
-    makeMove(fromSquare, toSquare) {
-
-        // making copies from the old and new square
-        const copyOfFromSquare = {...fromSquare}
-        const copyOfToSquare = {...toSquare}
-        // const newBoard = []
-
-        // the array of all squares is mapped and the two squares modified
-        const newBoard = this.squares.map(square => {
-            if(square.row === fromSquare.row && square.col === fromSquare.col) {
-
-                // the modifiable properties of the new square are copied to the old square
-                square.occupied = copyOfToSquare.occupied
-                square.piece = copyOfToSquare.piece
-                square.pieceElement = copyOfToSquare.pieceElement
-                square.playerColor = copyOfToSquare.playerColor
-            } else if(square.row === toSquare.row && square.col === toSquare.col) {
-
-                // the modifiable properties of the old square are copied to the new square
-                square.occupied = copyOfFromSquare.occupied
-                square.piece = copyOfFromSquare.piece
-                square.pieceElement = copyOfFromSquare.pieceElement
-                square.playerColor = copyOfFromSquare.playerColor
-            }
-            return square
-        })
-        this.squares = [...newBoard]
-
-
-        this.updateUI()
-        // console.log(this.squares)
-    }
-
-    updateUI() {
-        // the whole html of the squares is removed and written new
-        this.board.innerHTML = ""
-
-        // the array of all squares is ran through and the square elements with the new positions of the pieces are generated
-        this.squares.forEach(square => {
-            const squareElement = square.element
-
-            if(square.occupied) {
-                const pieceElement = square.pieceElement
-
-                squareElement.appendChild(pieceElement)
-            }
-
-            this.board.appendChild(squareElement)
-        })
-
-        // console.log(this.squares)
-    }
-    
 
     restart() {
         const initialBoard = []
@@ -166,20 +131,81 @@ class Board {
     
 }
 
+class Piece {
+    
+}
+
+class Pawn extends Piece {
+    #isBlack
+    constructor (board, isBlack) {
+        this.#isBlack = setBlack(isBlack);
+        this.board = board
+    }
+
+    getBlack() {
+        return this.#isBlack
+    }
+    setBlack(isBlack) {
+        this.#isBlack = isBlack
+    }
+}
+ 
+class Rook extends Piece {
+    constructor () {
+
+    }
+}
+
+class Knight extends Piece {
+    constructor () {
+
+    }
+}
+
+class Bishop extends Piece {
+    constructor () {
+
+    }
+}
+
+class Queen extends Piece {
+    constructor () {
+
+    }
+}
+
+class King extends Piece {
+    constructor () {
+
+    }
+}
 
 class Game {
     constructor() {
         this.gameBoard = new Board()
         this.gameStarted = false
+        this.form = document.getElementById("form")
+    }
+
+    splitInput(input) {
+        const inputArr = input.split(/\s+/).filter(Boolean)
+        console.log(inputArr);
     }
 
     start() {
         this.gameBoard.initializeBoard()
-    }
 
+        this.form.addEventListener("submit", function(event) {
+            event.preventDefault()
+
+            const inputStr = document.getElementById("move-input").value
+            this.splitInput(inputStr)
+        })
+    }
 }
 
 const game = new Game()
 game.start()
+
  
 
