@@ -87,17 +87,36 @@ class Board {
                     row: row,
                     col: col,
                     pieceHTML: PIECES_HTML[this.boardStringArr[row][col]],
+                    pieceObj: null
                 }
                 if (row == 1) {
-                    squareObj[pieceObj] = new Pawn(this, true)
+                    squareObj.pieceObj = new Pawn(this, true)
                 }
-                if (row == 7) {
-                    squareObj[pieceObj] = new Pawn(this, false)
+                if (row == 6) {
+                    squareObj.pieceObj = new Pawn(this, false)
                 }
                 this.boardLayout[row][col] = squareObj
             }
         }
+        // black pieces
+        this.boardLayout[0][0].pieceObj = new Rook(this, true)
+        this.boardLayout[0][1].pieceObj = new Knight(this, true)
+        this.boardLayout[0][2].pieceObj = new Bishop(this, true)
+        this.boardLayout[0][3].pieceObj = new Queen(this, true)
+        this.boardLayout[0][4].pieceObj = new King(this, true)
+        this.boardLayout[0][5].pieceObj = new Bishop(this, true)
+        this.boardLayout[0][6].pieceObj = new Knight(this, true)
+        this.boardLayout[0][7].pieceObj = new Rook(this, true)
 
+        // white pieces
+        this.boardLayout[7][0].pieceObj = new Rook(this, false)
+        this.boardLayout[7][1].pieceObj = new Knight(this, false)
+        this.boardLayout[7][2].pieceObj = new Bishop(this, false)
+        this.boardLayout[7][3].pieceObj = new King(this, false)
+        this.boardLayout[7][4].pieceObj = new Queen(this, false)
+        this.boardLayout[7][5].pieceObj = new Bishop(this, false)
+        this.boardLayout[7][6].pieceObj = new Knight(this, false)
+        this.boardLayout[7][7].pieceObj = new Rook(this, false)
 
         console.log(this.boardLayout);
     }
@@ -109,74 +128,85 @@ class Board {
         this.setBoardLayout()
     }
 
-    restart() {
-        const initialBoard = []
-        for (let initialSquare of this.squares) {
-            const copyOfSquare = {...initialSquare}
-            const square = this.squares.find(square => {
-                return square.pieceElement == initialSquare.initial.pieceElement
-            })
-
-            copyOfSquare.occupied = square.occupied
-            copyOfSquare.piece = square.piece
-            copyOfSquare.pieceElement = square.pieceElement
-            copyOfSquare.playerColor = square.playerColor
-
-            initialBoard.push(copyOfSquare)
-        }
-
-        this.squares = [...initialBoard]
-        this.updateUI()
-    }   
+    getFigure(row, col) {
+        if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
+            return this.boardLayout[row - 1][col - 1]
+        } else {
+            console.log("input for row and column are not valid");
+            return null
+        } 
+    }
     
 }
 
 class Piece {
-    
-}
-
-class Pawn extends Piece {
-    #isBlack
-    constructor (board, isBlack) {
-        this.#isBlack = setBlack(isBlack);
-        this.board = board
+    // #isBlack
+    constructor (isBlack) {
+        this.isBlack = isBlack
     }
 
     getBlack() {
-        return this.#isBlack
+        return this.isBlack
     }
     setBlack(isBlack) {
-        this.#isBlack = isBlack
+        this.isBlack = isBlack
     }
+}
+
+class Pawn extends Piece {
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
+    }    
 }
  
 class Rook extends Piece {
-    constructor () {
-
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
     }
 }
 
 class Knight extends Piece {
-    constructor () {
-
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
     }
 }
 
 class Bishop extends Piece {
-    constructor () {
-
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
     }
 }
 
 class Queen extends Piece {
-    constructor () {
-
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
     }
 }
 
 class King extends Piece {
-    constructor () {
+    constructor (board, isBlack) {
+        super(isBlack)
+        this.board = board
+    }
+}
 
+class Position {
+    constructor (str) {
+        this.strArr = str.split("")
+        this.getRow()
+        this.getColumn()
+    }
+
+    getRow() {
+        this.row = this.strArr[0].charCodeAt(0) - 96                
+    }
+    getColumn() {
+        this.col = parseInt(this.strArr[1], 10)
     }
 }
 
@@ -189,17 +219,27 @@ class Game {
 
     splitInput(input) {
         const inputArr = input.split(/\s+/).filter(Boolean)
-        console.log(inputArr);
+        return inputArr
     }
 
     start() {
         this.gameBoard.initializeBoard()
 
+        
+        const self = this
         this.form.addEventListener("submit", function(event) {
             event.preventDefault()
-
+            
             const inputStr = document.getElementById("move-input").value
-            this.splitInput(inputStr)
+            const inputArr = self.splitInput(inputStr)
+            const posFrom = new Position(inputArr[0])
+            const posTo = new Position(inputArr[1])
+            console.log(inputArr, posFrom, posTo);
+
+            const fig = self.gameBoard.getFigure(posFrom.row, posFrom.col)
+            if (fig != null) {
+                console.log(fig.pieceObj);
+            }
         })
     }
 }

@@ -49,10 +49,3 @@ main .board {
     grid-template-columns: 9;
     place-content: center;
 }
-
-.board .black {
-    background-color: #662200;
-}
-.board .white {
-    background-color: #ffbf80;
-}

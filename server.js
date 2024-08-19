@@ -1,5 +1,5 @@
 // server.js
-const express = require('express');
+import express from 'express';
 const app = express();
 
 // Middleware to enable CORS
