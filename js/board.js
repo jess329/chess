@@ -1,10 +1,8 @@
-// import { Pawn, Rook, Bishop, Knight, King, Queen } from "./pieces.js"
+import { Pawn, Rook, Bishop, Knight, King, Queen } from "./pieces.js"
 
 const ROWS = 9
 const COLS = 9
 const colChars = ["A", "B", "C", "D", "E", "F", "G", "H"]
-const posChars = ["a", "b", "c", "d", "e", "f", "g", "h"]
-const posNums = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const START_LAYOUT = "RNBQKBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbkqbnr"
 const PIECES_HTML = {
     "R": "♜",
@@ -24,7 +22,7 @@ const PIECES_HTML = {
 // upper case -> black figures
 // lower case -> white figures
 
-class Board {
+export class Board {
     constructor() {
         this.boardHTML = document.querySelector(".board")
         this.boardStringArr = this.splitLayoutStr() 
@@ -146,14 +144,15 @@ class Board {
         } 
     }
 
+    // update the boardLayout array after making a move on the board
     updateBoardLayout(startSquare, endSquare) {
         endSquare.pieceHTML = startSquare.pieceHTML
         endSquare.pieceObj = startSquare.pieceObj
         startSquare.pieceHTML = ""
         startSquare.pieceObj = null
-        // console.log(this.boardLayout);
     }
     
+    // check if the move with the passed positions is valid 
     isMoveValid(posFrom, posTo) {
         const startSquare = this.getFigure(posFrom.row, posFrom.col).pieceObj
         const endSquare = this.getFigure(posTo.row, posTo.col).pieceObj
@@ -187,138 +186,3 @@ class Board {
         }
     }
 }
-
-class Piece {
-    constructor (isBlack) {
-        this.isBlack = isBlack
-    }
-
-    getBlack() {
-        return this.isBlack
-    }
-    setBlack(isBlack) {
-        this.isBlack = isBlack
-    }
-}
-
-class Pawn extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }    
-}
- 
-class Rook extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }
-}
-
-class Knight extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }
-}
-
-class Bishop extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }
-}
-
-class Queen extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }
-}
-
-class King extends Piece {
-    constructor (board, isBlack, row, col) {
-        super(isBlack)
-        this.board = board
-        this.row = row
-        this.col = col
-    }
-}
-
-class Position {
-    constructor (str) {
-        this.str = str
-        this.strArr = str.split("")
-        this.getRow()
-        this.getColumn()
-    }
-
-    getColumn() {
-        this.col = this.strArr[0].charCodeAt(0) - 96                
-    }
-    getRow() {
-        this.row = parseInt(this.strArr[1], 10)
-    }
-}
-
-class Game {
-    constructor() {
-        this.gameBoard = new Board()
-        this.blacktoMove = false
-        this.form = document.getElementById("form")
-    }
-
-    // split input string and check if it contains two valid positions otherwise return null
-    splitInput(input) {
-        const inputArr = input.split(/\s+/).filter(Boolean)
-        const firstStr = inputArr[0].toLowerCase()
-        const secondStr = inputArr[1].toLowerCase()
-
-        if (inputArr.length == 2 && firstStr.length == 2 && secondStr.length == 2) {
-            // console.log("length is correct");
-            if (posChars.includes(firstStr[0]) && posNums.includes(firstStr[1]) && 
-                posChars.includes(secondStr[0]) && posNums.includes(secondStr[1])) {
-                    return inputArr
-                }
-        }
-        console.log("invalid input. try again")
-        return null
-    }
-
-    start() {
-        this.gameBoard.initializeBoard()
-
-        
-        const self = this
-        this.form.addEventListener("submit", function(event) {
-            event.preventDefault()
-            
-            let inputField = document.getElementById("move-input")
-            const inputStr = inputField.value
-            inputField.value = ""
-            const inputArr = self.splitInput(inputStr)
-            if (inputArr != null) {
-                const posFrom = new Position(inputArr[0])
-                const posTo = new Position(inputArr[1])
-    
-                self.gameBoard.move(posFrom, posTo)
-            }
-        })
-    }
-}
-
-const game = new Game()
-game.start()
-
- 
-

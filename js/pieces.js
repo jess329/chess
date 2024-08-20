@@ -1,46 +1,55 @@
-
+import { Piece } from "./piece.js"
 
 export class Pawn extends Piece {
-    #isBlack
-    constructor (board, isBlack) {
-        this.#isBlack = setBlack(isBlack);
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
         this.board = board
-    }
-
-    getBlack() {
-        return this.#isBlack
-    }
-    setBlack(isBlack) {
-        this.#isBlack = isBlack
-    }
+        this.row = row
+        this.col = col
+    }    
 }
-
+ 
 export class Rook extends Piece {
-    constructor () {
-
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
+        this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 export class Knight extends Piece {
-    constructor () {
-
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
+        this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 export class Bishop extends Piece {
-    constructor () {
-
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
+        this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 export class Queen extends Piece {
-    constructor () {
-
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
+        this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 export class King extends Piece {
-    constructor () {
-
+    constructor (board, isBlack, row, col) {
+        super(isBlack)
+        this.board = board
+        this.row = row
+        this.col = col
     }
 }
