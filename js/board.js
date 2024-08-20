@@ -3,6 +3,8 @@
 const ROWS = 9
 const COLS = 9
 const colChars = ["A", "B", "C", "D", "E", "F", "G", "H"]
+const posChars = ["a", "b", "c", "d", "e", "f", "g", "h"]
+const posNums = ["1", "2", "3", "4", "5", "6", "7", "8"]
 const START_LAYOUT = "RNBQKBNR/PPPPPPPP/********/********/********/********/pppppppp/rnbkqbnr"
 const PIECES_HTML = {
     "R": "♜",
@@ -31,6 +33,7 @@ class Board {
         this.cols = COLS
     }
     
+    // split the string START_LAYOUT into an array with 8 elements (rows) that each have 8 elements  
     splitLayoutStr() {
         let arr = START_LAYOUT.split("/")
         for (let i = 0; i < 8; i++) {
@@ -40,6 +43,7 @@ class Board {
         return arr
     }
 
+    // draw the marks the side of the board 
     setPositionMarks() {
         const allSquares = [...document.querySelectorAll(".white, .black, .posMark")]
         for (let c = 1; c < this.cols; c++) {
@@ -52,6 +56,7 @@ class Board {
         }
     }
     
+    // create the actual html elements for each square with the right class (9x9 for the marks on the side)
     createBoardSquares() {
         for (let row = 0; row < this.rows; row++) {
             for (let col = 0; col < this.cols; col++) {
@@ -66,6 +71,7 @@ class Board {
         }
     }
 
+    // set the html elements for the chess pieces on the board
     setInitialPieces() {
         const allSquares = [...document.querySelectorAll(".white, .black")]
         for (let i = 0; i < 8; i++) {
@@ -79,6 +85,7 @@ class Board {
         }
     }
 
+    // create a logical copy of the board in which the class objects for every piece
     setBoardLayout() {
         for (let row = 0; row < 8; row++) {
             this.boardLayout[row] = []
@@ -121,6 +128,7 @@ class Board {
         console.log(this.boardLayout);
     }
 
+    // this method is called at the beginning of the game in  
     initializeBoard() {
         this.createBoardSquares()
         this.setPositionMarks()
@@ -128,8 +136,8 @@ class Board {
         this.setBoardLayout()
     }
 
+    // get Square with the passed row & column from the boardLayout array
     getFigure(row, col) {
-        // get Square with the passed row & column from the boardLayout array
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             return this.boardLayout[row - 1][col - 1]
         } else {
@@ -143,7 +151,7 @@ class Board {
         endSquare.pieceObj = startSquare.pieceObj
         startSquare.pieceHTML = ""
         startSquare.pieceObj = null
-        console.log(this.boardLayout);
+        // console.log(this.boardLayout);
     }
     
     isMoveValid(posFrom, posTo) {
@@ -153,9 +161,14 @@ class Board {
         // return boolean for the validation of the passed move
         if (startSquare != null && endSquare == null) {
             return true
-        } else {
+        } else if (startSquare == null) {
+            console.log("there is no piece on the starting square");
+            return false
+        } else if (startSquare != null && endSquare != null) {
+            console.log("the destination square is not free");
             return false
         }
+        return false
     }
 
     move(posFrom, posTo) {
@@ -261,13 +274,25 @@ class Position {
 class Game {
     constructor() {
         this.gameBoard = new Board()
-        this.gameStarted = false
+        this.blacktoMove = false
         this.form = document.getElementById("form")
     }
 
+    // split input string and check if it contains two valid positions otherwise return null
     splitInput(input) {
         const inputArr = input.split(/\s+/).filter(Boolean)
-        return inputArr
+        const firstStr = inputArr[0].toLowerCase()
+        const secondStr = inputArr[1].toLowerCase()
+
+        if (inputArr.length == 2 && firstStr.length == 2 && secondStr.length == 2) {
+            // console.log("length is correct");
+            if (posChars.includes(firstStr[0]) && posNums.includes(firstStr[1]) && 
+                posChars.includes(secondStr[0]) && posNums.includes(secondStr[1])) {
+                    return inputArr
+                }
+        }
+        console.log("invalid input. try again")
+        return null
     }
 
     start() {
@@ -278,13 +303,16 @@ class Game {
         this.form.addEventListener("submit", function(event) {
             event.preventDefault()
             
-            const inputStr = document.getElementById("move-input").value
+            let inputField = document.getElementById("move-input")
+            const inputStr = inputField.value
+            inputField.value = ""
             const inputArr = self.splitInput(inputStr)
-            const posFrom = new Position(inputArr[0])
-            const posTo = new Position(inputArr[1])
-            console.log(inputArr, posFrom.row, posFrom.col);
-
-            self.gameBoard.move(posFrom, posTo)
+            if (inputArr != null) {
+                const posFrom = new Position(inputArr[0])
+                const posTo = new Position(inputArr[1])
+    
+                self.gameBoard.move(posFrom, posTo)
+            }
         })
     }
 }
