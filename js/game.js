@@ -7,8 +7,9 @@ const posNums = ["1", "2", "3", "4", "5", "6", "7", "8"]
 class Game {
     constructor() {
         this.gameBoard = new Board()
-        this.blacktoMove = false
+        this.blackToMove = false
         this.form = document.getElementById("form")
+        this.colorComment = document.getElementById("color-comment")
     }
 
     // split input string and check if it contains two valid positions otherwise return null
@@ -31,7 +32,7 @@ class Game {
     // main method that expects input and controls the game
     start() {
         this.gameBoard.initializeBoard()
-
+        this.colorComment.innerText = "white to move"
         
         const self = this
         this.form.addEventListener("submit", function(event) {
@@ -45,7 +46,13 @@ class Game {
                 const posFrom = new Position(inputArr[0])
                 const posTo = new Position(inputArr[1])
     
-                self.gameBoard.move(posFrom, posTo)
+                if (self.gameBoard.isMoveValid(posFrom, posTo, self.blackToMove)) {
+                    self.gameBoard.move(posFrom, posTo)
+                    self.blackToMove = !self.blackToMove
+
+                    const colorToMoveStr = self.blackToMove ? "black to move" : "white to move"
+                    self.colorComment.innerText = colorToMoveStr
+                }
             }
         })
     }

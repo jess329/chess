@@ -3,6 +3,11 @@ export class Piece {
         this.isBlack = isBlack
     }
 
+    getColor() {
+        const color = this.isBlack ? "black" : "white"
+        return color
+    }
+
     getBlack() {
         return this.isBlack
     }

@@ -19,12 +19,13 @@ main .main-content {
     align-items: flex-start;
     gap: 2rem;
 }
-main .btn-container {
+main .side-container {
     display: grid;
+    max-width: 200px;
     gap: 2rem;
     padding-top: 5rem;
 }
-.btn-container button {
+.side-container button {
     padding: 0.5rem 3rem;
     font-size: 20px;
     border-radius: 20px;

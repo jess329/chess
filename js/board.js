@@ -153,21 +153,38 @@ export class Board {
     }
     
     // check if the move with the passed positions is valid 
-    isMoveValid(posFrom, posTo) {
+    isMoveValid(posFrom, posTo, blackToMove) {
         const startSquare = this.getFigure(posFrom.row, posFrom.col).pieceObj
         const endSquare = this.getFigure(posTo.row, posTo.col).pieceObj
 
         // return boolean for the validation of the passed move
-        if (startSquare != null && endSquare == null) {
-            return true
-        } else if (startSquare == null) {
-            console.log("there is no piece on the starting square");
-            return false
-        } else if (startSquare != null && endSquare != null) {
-            console.log("the destination square is not free");
+        if (startSquare == null) {
+            this.commentMove("Invalid move: start square is empty")
             return false
         }
-        return false
+        if (blackToMove != startSquare.isBlack) {
+            this.commentMove("Invalid move: it's not your turn")
+            return false
+        } 
+
+        if (blackToMove == startSquare.isBlack) {
+            if (endSquare == null) {
+                return true
+            } else {
+                if (startSquare.isBlack != endSquare.isBlack) {
+                    this.commentMove("piece captured")
+                    return true
+                } else {
+                    this.commentMove("Invalid move: piece of the same color on the destination square")
+                    return false
+                }
+            }
+        }
+    }
+
+    commentMove(str) {
+        const moveComment = document.getElementById("move-comment")
+        moveComment.innerText = str
     }
 
     move(posFrom, posTo) {
@@ -176,13 +193,11 @@ export class Board {
         const endSquare = this.getFigure(posTo.row, posTo.col)
 
         // check if move is valid and move the starting piece to the new position
-        if (this.isMoveValid(posFrom, posTo)) {
-            console.log(`move ${posFrom.str} to ${posTo.str} is valid`);
-            allSquares[(startSquare.row * 8) + startSquare.col].innerHTML = ""
-            allSquares[(endSquare.row * 8) + endSquare.col].innerHTML = startSquare.pieceHTML
+        console.log(`move ${posFrom.str} (${startSquare.pieceObj.getLabel()}) to ${posTo.str} is valid`);    
+        allSquares[(startSquare.row * 8) + startSquare.col].innerHTML = ""
+        allSquares[(endSquare.row * 8) + endSquare.col].innerHTML = startSquare.pieceHTML
 
-            // update boardLayout array
-            this.updateBoardLayout(startSquare, endSquare)
-        }
+        // update boardLayout array
+        this.updateBoardLayout(startSquare, endSquare)    
     }
 }
