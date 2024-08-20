@@ -90,33 +90,33 @@ class Board {
                     pieceObj: null
                 }
                 if (row == 1) {
-                    squareObj.pieceObj = new Pawn(this, true)
+                    squareObj.pieceObj = new Pawn(this, true, 2, col + 1)
                 }
                 if (row == 6) {
-                    squareObj.pieceObj = new Pawn(this, false)
+                    squareObj.pieceObj = new Pawn(this, false, 7, col + 1)
                 }
                 this.boardLayout[row][col] = squareObj
             }
         }
         // black pieces
-        this.boardLayout[0][0].pieceObj = new Rook(this, true)
-        this.boardLayout[0][1].pieceObj = new Knight(this, true)
-        this.boardLayout[0][2].pieceObj = new Bishop(this, true)
-        this.boardLayout[0][3].pieceObj = new Queen(this, true)
-        this.boardLayout[0][4].pieceObj = new King(this, true)
-        this.boardLayout[0][5].pieceObj = new Bishop(this, true)
-        this.boardLayout[0][6].pieceObj = new Knight(this, true)
-        this.boardLayout[0][7].pieceObj = new Rook(this, true)
+        this.boardLayout[0][0].pieceObj = new Rook(this, true, 1, 1)
+        this.boardLayout[0][1].pieceObj = new Knight(this, true, 1, 2)
+        this.boardLayout[0][2].pieceObj = new Bishop(this, true, 1, 3)
+        this.boardLayout[0][3].pieceObj = new Queen(this, true, 1, 4)
+        this.boardLayout[0][4].pieceObj = new King(this, true, 1, 5)
+        this.boardLayout[0][5].pieceObj = new Bishop(this, true, 1, 6)
+        this.boardLayout[0][6].pieceObj = new Knight(this, true, 1, 7)
+        this.boardLayout[0][7].pieceObj = new Rook(this, true, 1, 8)
 
         // white pieces
-        this.boardLayout[7][0].pieceObj = new Rook(this, false)
-        this.boardLayout[7][1].pieceObj = new Knight(this, false)
-        this.boardLayout[7][2].pieceObj = new Bishop(this, false)
-        this.boardLayout[7][3].pieceObj = new King(this, false)
-        this.boardLayout[7][4].pieceObj = new Queen(this, false)
-        this.boardLayout[7][5].pieceObj = new Bishop(this, false)
-        this.boardLayout[7][6].pieceObj = new Knight(this, false)
-        this.boardLayout[7][7].pieceObj = new Rook(this, false)
+        this.boardLayout[7][0].pieceObj = new Rook(this, false, 8, 1)
+        this.boardLayout[7][1].pieceObj = new Knight(this, false, 8, 2)
+        this.boardLayout[7][2].pieceObj = new Bishop(this, false, 8, 3)
+        this.boardLayout[7][3].pieceObj = new King(this, false, 8, 4)
+        this.boardLayout[7][4].pieceObj = new Queen(this, false, 8, 5)
+        this.boardLayout[7][5].pieceObj = new Bishop(this, false, 8, 6)
+        this.boardLayout[7][6].pieceObj = new Knight(this, false, 8, 7)
+        this.boardLayout[7][7].pieceObj = new Rook(this, false, 8, 8)
 
         console.log(this.boardLayout);
     }
@@ -129,6 +129,7 @@ class Board {
     }
 
     getFigure(row, col) {
+        // get Square with the passed row & column from the boardLayout array
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
             return this.boardLayout[row - 1][col - 1]
         } else {
@@ -136,11 +137,45 @@ class Board {
             return null
         } 
     }
+
+    updateBoardLayout(startSquare, endSquare) {
+        endSquare.pieceHTML = startSquare.pieceHTML
+        endSquare.pieceObj = startSquare.pieceObj
+        startSquare.pieceHTML = ""
+        startSquare.pieceObj = null
+        console.log(this.boardLayout);
+    }
     
+    isMoveValid(posFrom, posTo) {
+        const startSquare = this.getFigure(posFrom.row, posFrom.col).pieceObj
+        const endSquare = this.getFigure(posTo.row, posTo.col).pieceObj
+
+        // return boolean for the validation of the passed move
+        if (startSquare != null && endSquare == null) {
+            return true
+        } else {
+            return false
+        }
+    }
+
+    move(posFrom, posTo) {
+        const allSquares = [...document.querySelectorAll(".white, .black")]
+        const startSquare = this.getFigure(posFrom.row, posFrom.col)
+        const endSquare = this.getFigure(posTo.row, posTo.col)
+
+        // check if move is valid and move the starting piece to the new position
+        if (this.isMoveValid(posFrom, posTo)) {
+            console.log(`move ${posFrom.str} to ${posTo.str} is valid`);
+            allSquares[(startSquare.row * 8) + startSquare.col].innerHTML = ""
+            allSquares[(endSquare.row * 8) + endSquare.col].innerHTML = startSquare.pieceHTML
+
+            // update boardLayout array
+            this.updateBoardLayout(startSquare, endSquare)
+        }
+    }
 }
 
 class Piece {
-    // #isBlack
     constructor (isBlack) {
         this.isBlack = isBlack
     }
@@ -154,59 +189,72 @@ class Piece {
 }
 
 class Pawn extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }    
 }
  
 class Rook extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 class Knight extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 class Bishop extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 class Queen extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 class King extends Piece {
-    constructor (board, isBlack) {
+    constructor (board, isBlack, row, col) {
         super(isBlack)
         this.board = board
+        this.row = row
+        this.col = col
     }
 }
 
 class Position {
     constructor (str) {
+        this.str = str
         this.strArr = str.split("")
         this.getRow()
         this.getColumn()
     }
 
-    getRow() {
-        this.row = this.strArr[0].charCodeAt(0) - 96                
-    }
     getColumn() {
-        this.col = parseInt(this.strArr[1], 10)
+        this.col = this.strArr[0].charCodeAt(0) - 96                
+    }
+    getRow() {
+        this.row = parseInt(this.strArr[1], 10)
     }
 }
 
@@ -234,12 +282,9 @@ class Game {
             const inputArr = self.splitInput(inputStr)
             const posFrom = new Position(inputArr[0])
             const posTo = new Position(inputArr[1])
-            console.log(inputArr, posFrom, posTo);
+            console.log(inputArr, posFrom.row, posFrom.col);
 
-            const fig = self.gameBoard.getFigure(posFrom.row, posFrom.col)
-            if (fig != null) {
-                console.log(fig.pieceObj);
-            }
+            self.gameBoard.move(posFrom, posTo)
         })
     }
 }
