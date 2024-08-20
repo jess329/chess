@@ -14,10 +14,6 @@ body {
     background: var(--bg-clr);
 }
 
-header {
-    /* background: #FFF; */
-}
-
 .black {
     background: var(--bg-black);
 }

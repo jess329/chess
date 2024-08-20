@@ -21,7 +21,7 @@ main .main-content {
 }
 main .side-container {
     display: grid;
-    max-width: 200px;
+    max-width: 220px;
     gap: 2rem;
     padding-top: 5rem;
 }
