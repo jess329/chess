@@ -10,6 +10,7 @@ class Game {
         this.blackToMove = false
         this.form = document.getElementById("form")
         this.colorComment = document.getElementById("color-comment")
+        this.restartButton = document.querySelector(".restart")
     }
 
     // split input string and check if it contains two valid positions otherwise return null
@@ -54,6 +55,14 @@ class Game {
                     self.colorComment.innerText = colorToMoveStr
                 }
             }
+        })
+
+        this.restartButton.addEventListener("click", function(event) {
+            console.log("restart");
+            self.gameBoard.clearBoard()
+            self.gameBoard.initializeBoard()
+            self.blackToMove = false
+            self.colorComment.innerText = "white to move"
         })
     }
 }

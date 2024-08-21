@@ -136,6 +136,10 @@ export class Board {
         this.setBoardLayout()
     }
 
+    clearBoard() {
+        this.boardHTML.innerHTML = ""
+    }
+
     // get Square with the passed row & column from the boardLayout array
     getFigure(row, col) {
         if (row >= 1 && row <= 8 && col >= 1 && col <= 8) {
