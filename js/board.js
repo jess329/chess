@@ -178,15 +178,17 @@ export class Board {
         } 
 
         if (blackToMove == startSquare.isBlack) {
-            if (endSquare == null) {
-                return true
-            } else {
-                if (startSquare.isBlack != endSquare.isBlack) {
-                    this.commentMove("piece captured")
+            if (startSquare.canMoveTo(posFrom, posTo)) {
+                if (endSquare == null) {
                     return true
                 } else {
-                    this.commentMove("Invalid move: piece of the same color on the destination square")
-                    return false
+                    if (startSquare.isBlack != endSquare.isBlack) {
+                        this.commentMove("piece captured")
+                        return true
+                    } else {
+                        this.commentMove("Invalid move: piece of the same color on the destination square")
+                        return false
+                    }
                 }
             }
         }
@@ -201,8 +203,8 @@ export class Board {
         const startSquare = this.getFigure(posFrom.row, posFrom.col)
         const endSquare = this.getFigure(posTo.row, posTo.col)
 
-        const isFree = this.isFreeBetween(posFrom, posTo)
-        console.log(isFree);
+        // const isFree = this.isFreeBetween(posFrom, posTo)
+        // console.log(isFree);
 
         // check if move is valid and move the starting piece to the new position
         console.log(`move ${posFrom.str} (${startSquare.pieceObj.getLabel()}) to ${posTo.str} is valid`);    
@@ -238,17 +240,22 @@ export class Board {
             col += colDif
         }
 
-        console.log(fieldsBetween);
+        // console.log(fieldsBetween);
         return fieldsBetween
     }
 
     isFreeBetween(startPos, endPos) {
         const fieldsBetween = this.getFieldsBetween(startPos, endPos)
-        for (let square of fieldsBetween) {
-            if (square.pieceObj != null) {
-                return false
-            }
+        if(fieldsBetween.length == 0) {
+            return true
         }
-        return true
+        if (fieldsBetween != null) {
+            for (let square of fieldsBetween) {
+                if (square.pieceObj != null) {
+                    return false
+                }
+            }
+            return true
+        }
     }
 }

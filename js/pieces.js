@@ -15,7 +15,19 @@ export class Pawn extends Piece {
     }
 
     canMoveTo(startPos, endPos) {
-        
+        const rowDif = Math.abs(endPos.row - startPos.row)
+        if (this.board.isFreeBetween(startPos, endPos)) {
+            if (endPos.col != startPos.col) {
+                console.log("pawn cannot switch columns");
+                return false
+            } else if (rowDif == 1) {
+                return true
+            } else if (startPos.row == this.startRow && startPos.col == this.startCol && rowDif <= 2) {
+                return true
+            }
+        }
+        this.board.commentMove("Invalid move. Try again")
+        return false
     }
 }
  
@@ -30,6 +42,21 @@ export class Rook extends Piece {
     getLabel() {
         return `${this.getColor()} rook` 
     }
+
+    canMoveTo(startPos, endPos) {
+        const rowDif = endPos.row - startPos.row
+        const colDif = endPos.col - startPos.col
+        if (this.board.isFreeBetween(startPos, endPos)) {
+            if (rowDif == 0 || colDif == 0) {
+                return true
+            } else {
+                this.board.commentMove("rook can only move straight")
+                return false
+            }
+        }
+        this.board.commentMove("Invalid move. Try again")
+        return false
+    }
 }
 
 export class Knight extends Piece {
@@ -42,6 +69,14 @@ export class Knight extends Piece {
 
     getLabel() {
         return `${this.getColor()} knight` 
+    }
+
+    canMoveTo(startPos, endPos) {
+        const endFigure = this.board.getFigure(endPos.row, endPos.col).pieceObj
+        if (endFigure == null) {
+            return true
+        }
+        return false
     }
 }
 
@@ -56,6 +91,21 @@ export class Bishop extends Piece {
     getLabel() {
         return `${this.getColor()} bishop` 
     }
+
+    canMoveTo(startPos, endPos) {
+        const rowDif = endPos.row - startPos.row
+        const colDif = endPos.col - startPos.col
+        if (this.board.isFreeBetween(startPos, endPos)) {
+            if (rowDif != 0 && colDif != 0) {
+                return true
+            } else {
+                this.board.commentMove("bishop can only move diagonal")
+                return false
+            }
+        }
+        this.board.commentMove("Invalid move. Try again")
+        return false
+    }
 }
 
 export class Queen extends Piece {
@@ -69,6 +119,13 @@ export class Queen extends Piece {
     getLabel() {
         return `${this.getColor()} queen` 
     }
+
+    canMoveTo(startPos, endPos) {
+        if (this.board.isFreeBetween(startPos, endPos)) {
+            return true
+        }
+        return false
+    }
 }
 
 export class King extends Piece {
@@ -81,5 +138,12 @@ export class King extends Piece {
 
     getLabel() {
         return `${this.getColor()} king` 
+    }
+
+    canMoveTo(startPos, endPos) {
+        if (this.board.isFreeBetween(startPos, endPos)) {
+            return true
+        }
+        return false
     }
 }
