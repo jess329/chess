@@ -6,10 +6,16 @@ export class Pawn extends Piece {
         this.board = board
         this.row = row
         this.col = col
+        this.startRow = row
+        this.startCol = col
     }    
 
     getLabel() {
         return `${this.getColor()} pawn` 
+    }
+
+    canMoveTo(startPos, endPos) {
+        
     }
 }
  

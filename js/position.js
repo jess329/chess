@@ -12,4 +12,8 @@ export class Position {
     getRow() {
         this.row = parseInt(this.strArr[1], 10)
     }
+
+    equals(otherPos) {
+        return this.str == otherPos.str
+    }
 }

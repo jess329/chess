@@ -29,6 +29,8 @@ export class Board {
         this.boardLayout = []
         this.rows = ROWS
         this.cols = COLS
+        this.moveComment = document.getElementById("move-comment")
+
     }
     
     // split the string START_LAYOUT into an array with 8 elements (rows) that each have 8 elements  
@@ -148,22 +150,30 @@ export class Board {
     updateBoardLayout(startSquare, endSquare) {
         endSquare.pieceHTML = startSquare.pieceHTML
         endSquare.pieceObj = startSquare.pieceObj
+        endSquare.pieceObj.row = endSquare.row + 1
+        endSquare.pieceObj.col = endSquare.col + 1
         startSquare.pieceHTML = ""
         startSquare.pieceObj = null
     }
     
     // check if the move with the passed positions is valid 
     isMoveValid(posFrom, posTo, blackToMove) {
+        this.moveComment.innerText = ""
         const startSquare = this.getFigure(posFrom.row, posFrom.col).pieceObj
         const endSquare = this.getFigure(posTo.row, posTo.col).pieceObj
 
         // return boolean for the validation of the passed move
+        if (posFrom.equals(posTo)) {
+            this.commentMove("Invalid move: start square and destination square cannot be the same")
+            return false
+        }
         if (startSquare == null) {
             this.commentMove("Invalid move: start square is empty")
             return false
         }
         if (blackToMove != startSquare.isBlack) {
-            this.commentMove("Invalid move: it's not your turn")
+            const colorToMove = blackToMove ? "black" : "white"
+            this.commentMove(`Invalid move: ${colorToMove} has the move`)
             return false
         } 
 
@@ -183,14 +193,16 @@ export class Board {
     }
 
     commentMove(str) {
-        const moveComment = document.getElementById("move-comment")
-        moveComment.innerText = str
+        this.moveComment.innerText = str
     }
 
     move(posFrom, posTo) {
         const allSquares = [...document.querySelectorAll(".white, .black")]
         const startSquare = this.getFigure(posFrom.row, posFrom.col)
         const endSquare = this.getFigure(posTo.row, posTo.col)
+
+        const isFree = this.isFreeBetween(posFrom, posTo)
+        console.log(isFree);
 
         // check if move is valid and move the starting piece to the new position
         console.log(`move ${posFrom.str} (${startSquare.pieceObj.getLabel()}) to ${posTo.str} is valid`);    
@@ -199,5 +211,44 @@ export class Board {
 
         // update boardLayout array
         this.updateBoardLayout(startSquare, endSquare)    
+    }
+
+    getFieldsBetween(startPos, endPos) {
+        let rowDif = endPos.row - startPos.row
+        let colDif = endPos.col - startPos.col
+        let fieldsBetween = []
+
+        if (rowDif != 0 && colDif != 0 && Math.abs(rowDif) != Math.abs(colDif)) {
+            console.log("direct move not possible");
+            return null
+        }
+
+        if (rowDif != 0) {
+            rowDif = rowDif / Math.abs(rowDif)
+        }
+        if (colDif != 0) {
+            colDif = colDif / Math.abs(colDif)
+        }
+        let row = startPos.row + rowDif
+        let col = startPos.col + colDif
+
+        while (row != endPos.row || col != endPos.col) {
+            fieldsBetween.push(this.getFigure(row, col))
+            row += rowDif
+            col += colDif
+        }
+
+        console.log(fieldsBetween);
+        return fieldsBetween
+    }
+
+    isFreeBetween(startPos, endPos) {
+        const fieldsBetween = this.getFieldsBetween(startPos, endPos)
+        for (let square of fieldsBetween) {
+            if (square.pieceObj != null) {
+                return false
+            }
+        }
+        return true
     }
 }

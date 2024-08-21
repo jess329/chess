@@ -25,7 +25,7 @@ class Game {
                     return inputArr
                 }
         }
-        console.log("invalid input. try again")
+        this.gameBoard.commentMove("invalid input. try again (e.g. b2 b3)")
         return null
     }
 
