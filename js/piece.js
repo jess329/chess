@@ -4,7 +4,7 @@ export class Piece {
     }
 
     getColor() {
-        const color = this.isBlack ? "black" : "white"
+        const color = this.isBlack ? "Black" : "White"
         return color
     }
 

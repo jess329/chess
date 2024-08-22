@@ -30,7 +30,8 @@ export class Board {
         this.rows = ROWS
         this.cols = COLS
         this.moveComment = document.getElementById("move-comment")
-
+        this.pointsBlack = 0
+        this.pointsWhite = 0
     }
     
     // split the string START_LAYOUT into an array with 8 elements (rows) that each have 8 elements  
@@ -187,7 +188,7 @@ export class Board {
                     return true
                 } else {
                     if (startSquare.isBlack != endSquare.isBlack) {
-                        this.commentMove("piece captured")
+                        this.pieceCaptured(startSquare, endSquare)
                         return true
                     } else {
                         this.commentMove("Invalid move: piece of the same color on the destination square")
@@ -261,5 +262,51 @@ export class Board {
             }
             return true
         }
+    }
+
+    pieceCaptured(startFig, endFig) {
+        const pointsBlackHTML = document.querySelector(".pts-black")
+        const pointsWhiteHTML = document.querySelector(".pts-white")
+        const endFigStr = endFig.getLabel().split(" ")[1]
+        let points = 0
+        if (endFigStr == "King") {
+            this.commentMove(`Game Over! ${startFig.getLabel()} beats ${endFig.getLabel()}`)
+        } else {
+            this.commentMove(`${startFig.getLabel()} beats ${endFig.getLabel()}`)
+            switch (endFigStr) {
+                case "Pawn": 
+                    points = 1
+                    break;
+                case "Rook": 
+                    points = 5
+                    break;
+                case "Knight": 
+                    points = 3
+                    break;
+                case "Bishop":
+                    points = 3
+                    break;
+                case "Queen":
+                    points = 9
+                    break;
+            }
+        }
+        if (startFig.isBlack) {
+            this.pointsBlack += points
+        } else {
+            this.pointsWhite += points
+        }
+
+        pointsBlackHTML.innerText = `Points Black: ${this.pointsBlack}`
+        pointsWhiteHTML.innerText = `Points White: ${this.pointsWhite}`
+    }
+
+    resetPoints() {
+        const pointsBlackHTML = document.querySelector(".pts-black")
+        const pointsWhiteHTML = document.querySelector(".pts-white")
+        pointsBlackHTML.innerText = "Points Black: 0"
+        pointsWhiteHTML.innerText = "Points White: 0"
+        this.pointsBlack = 0
+        this.pointsWhite = 0
     }
 }

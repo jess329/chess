@@ -11,7 +11,7 @@ export class Pawn extends Piece {
     }    
 
     getLabel() {
-        return `${this.getColor()} pawn` 
+        return `${this.getColor()} Pawn` 
     }
 
     canMoveTo(startPos, endPos) {
@@ -50,7 +50,7 @@ export class Rook extends Piece {
     }
 
     getLabel() {
-        return `${this.getColor()} rook` 
+        return `${this.getColor()} Rook` 
     }
 
     canMoveTo(startPos, endPos) {
@@ -78,14 +78,14 @@ export class Knight extends Piece {
     }
 
     getLabel() {
-        return `${this.getColor()} knight` 
+        return `${this.getColor()} Knight` 
     }
 
     canMoveTo(startPos, endPos) {
         const rowDif = Math.abs(endPos.row - startPos.row)
         const colDif = Math.abs(endPos.col - startPos.col)
         const endFigure = this.board.getFigure(endPos.row, endPos.col).pieceObj
-        if (endFigure == null) {
+        if (endFigure == null || endFigure.isBlack != this.isBlack) {
             if ((rowDif == 2 && colDif == 1) || (rowDif == 1 && colDif == 2)) {
                 return true
             } else {
@@ -107,7 +107,7 @@ export class Bishop extends Piece {
     }
 
     getLabel() {
-        return `${this.getColor()} bishop` 
+        return `${this.getColor()} Bishop` 
     }
 
     canMoveTo(startPos, endPos) {
@@ -135,7 +135,7 @@ export class Queen extends Piece {
     }
 
     getLabel() {
-        return `${this.getColor()} queen` 
+        return `${this.getColor()} Queen` 
     }
 
     canMoveTo(startPos, endPos) {
@@ -163,14 +163,14 @@ export class King extends Piece {
     }
 
     getLabel() {
-        return `${this.getColor()} king` 
+        return `${this.getColor()} King` 
     }
 
     canMoveTo(startPos, endPos) {
         const endFigure = this.board.getFigure(endPos.row, endPos.col).pieceObj
         const rowDif = Math.abs(endPos.row - startPos.row)
         const colDif = Math.abs(endPos.col - startPos.col)
-        if (endFigure != null) {
+        if (endFigure != null || endFigure.isBlack != this.isBlack) {
             if (rowDif <= 1 && colDif <= 1) {
                 return true
             } else {

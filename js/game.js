@@ -11,6 +11,7 @@ class Game {
         this.form = document.getElementById("form")
         this.colorComment = document.getElementById("color-comment")
         this.restartButton = document.querySelector(".restart")
+        this.kingCaptured = false
     }
 
     // split input string and check if it contains two valid positions otherwise return null
@@ -26,7 +27,7 @@ class Game {
                     return inputArr
                 }
         }
-        this.gameBoard.commentMove("invalid input. try again (e.g. b2 b3)")
+        this.gameBoard.commentMove("Invalid Input. Try again like this -> b2 b3")
         return null
     }
 
@@ -59,11 +60,20 @@ class Game {
 
         this.restartButton.addEventListener("click", function(event) {
             console.log("restart");
-            self.gameBoard.clearBoard()
-            self.gameBoard.initializeBoard()
-            self.blackToMove = false
-            self.colorComment.innerText = "white to move"
+            self.restartGame()
         })
+    }
+
+    restartGame() {
+        this.gameBoard.clearBoard()
+        this.gameBoard.initializeBoard()
+        this.gameBoard.resetPoints()
+        this.blackToMove = false
+        this.colorComment.innerText = "white to move"
+    }
+
+    stop() {
+
     }
 }
 
