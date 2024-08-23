@@ -2,11 +2,12 @@
 body {
     display: flex;
     flex-direction: column;
+    font-size: 20px;
     /* gap: 3rem; */
 }
 header {
     width: 100vw;
-    height: 100px;
+    height: 10vh;
 }
 main {
     width: 100vw;
@@ -35,10 +36,11 @@ main .side-container {
 #form {
     display: grid;
 }
+#move-input {
+    height: 30px;
+    font-size: 18px;
+}
 main .board {
-    /* width: 600px; */
-    /* height: 600px; */
-    /* border: 2px solid black;  */
     display: grid;
     grid-template-columns: repeat(9, 70px);
     grid-template-rows: repeat(9, 70px);
@@ -49,4 +51,72 @@ main .board {
     display: grid;
     grid-template-columns: 9;
     place-content: center;
+}
+.black, .white {
+    font-size: 50px;
+}
+.posMark {
+    font-size: 20px;
+}
+
+@media (max-width: 1000px) {
+    body {
+        font-size: 15px;
+    }
+    main {
+        height: 90vh;
+    }
+    .side-container {
+        max-width: 180px;
+    }
+    .side-container button {
+        width: 150px;
+        font-size: 15px;
+        padding: 0.5rem 1rem;
+    }
+    #move-input {
+        height: 20px;
+        font-size: 14px;
+    }
+    main .board {
+        grid-template-columns: repeat(9, 50px);
+        grid-template-rows: repeat(9, 50px);
+    }
+    .board div {
+        width: 50px;
+        height: 50px;
+    }
+    .black, .white {
+        font-size: 30px;
+    }
+    
+}
+
+@media (max-width: 767px) {
+    header {
+        height: 5vh;
+    }
+    .main-content {
+        padding: 0 2rem;
+        flex-direction: column-reverse;
+    }
+    main .side-container {
+        max-width: 80%;
+        padding-top: 0;
+        gap: 1rem;
+    }
+    main .board {
+        grid-template-columns: repeat(9, 35px);
+        grid-template-rows: repeat(9, 35px);
+    }
+    .board div {
+        width: 35px;
+        height: 35px;
+    }
+    .black, .white {
+        font-size: 20px;
+    }
+    .posMark {
+        font-size: 15px;
+    }
 }
