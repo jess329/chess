@@ -1,3 +1,3 @@
-Check it out online: https://www.chess-jess.netlify.app
+Check it out online: https://chess-jess.netlify.app
 
 Hosted on Netlify.
